@@ -44,7 +44,7 @@ class FacialDetection(Dataset):
     def __init__(self, images: list = None, id: str = None, known_faces: list = [], known_names: list = []) -> None:
         super().__init__(images, id, known_faces, known_names)
 
-    def detect(self, frame):
+    def detect(self, frame) -> str:
         known_faces, known_names = self.knownFaces_, self.knownNames_
         face_locations = face_recognition.face_locations(frame)
         face_encodings = face_recognition.face_encodings(frame, face_locations)
@@ -59,7 +59,9 @@ class FacialDetection(Dataset):
             if True in matches:
                 match_index = matches.index(True)
                 name = known_names[match_index]
-                print(name)
+
+            
+            return name
 
 class ImageList():
 
@@ -72,9 +74,34 @@ class ImageList():
             self.images[uid] = [img]
         else:
             self.images[uid].append(img)
-         
 
-if __name__ == '__main__':
+
+def Register(uid: str, imagePaths: list) -> None:
+    imageData = ImageList()
+    for path in imagePaths:
+        imageData.ProcessImage(uid, path)
+    
+    images = imageData.images
+
+    faces = json.loads(open('faces.json').read())
+    for id in images:
+        if id in faces['known names']:
+            print('Id already registered')
+            continue
+        dataset = Dataset(images = images[id], id = id, known_faces=faces['known faces'], known_names=faces['known names'])
+        faceLocs = dataset.AddFaceLocations()
+        dataset.AddFaceEncodings(faceLocs)
+        dataset.WriteFaces()
+
+def Detect(filename: str) -> str:
+    img = cv2.imread(filename)
+    faces = json.loads(open('faces.json').read())
+    detection = FacialDetection(known_faces = faces['known faces'], known_names = faces['known names'])
+    name = detection.detect(img)
+    
+    return name
+
+'''if __name__ == '__main__':
     imageData = ImageList()
     for imgFolder in os.listdir('data/'):
         for filename in os.listdir('data/' + imgFolder):
@@ -94,4 +121,4 @@ if __name__ == '__main__':
     
     testImage = cv2.imread('test.jpeg')
     detection = FacialDetection(known_faces = faces['known faces'], known_names = faces['known names'])
-    detection.detect(testImage)
+    detection.detect(testImage)'''

@@ -61,22 +61,33 @@ class FacialDetection(Dataset):
                 name = known_names[match_index]
                 print(name)
 
+class ImageList():
+
+    def __init__(self) -> None:
+        self.images = dict()
+
+    def ProcessImage(self, uid, filename) -> None:
+        img = cv2.imread(filename)
+        if uid not in self.images.keys():
+            self.images[uid] = [img]
+        else:
+            self.images[uid].append(img)
+         
+
 if __name__ == '__main__':
-    images = dict()
+    imageData = ImageList()
     for imgFolder in os.listdir('data/'):
-        images[imgFolder] = []
         for filename in os.listdir('data/' + imgFolder):
             filename = 'data/' + imgFolder + '/' + filename
-            img = cv2.imread(filename)
-            images[imgFolder].append(img)
-            
+            imageData.ProcessImage(imgFolder, filename)
+
+    images = imageData.images
+
     faces = json.loads(open('faces.json').read())
     for id in images:
         if id in faces['known names']:
             continue
         dataset = Dataset(images = images[id], id = id, known_faces=faces['known faces'], known_names=faces['known names'])
-        print(dataset.imageNum_)
-        print(dataset.id)
         faceLocs = dataset.AddFaceLocations()
         dataset.AddFaceEncodings(faceLocs)
         dataset.WriteFaces()

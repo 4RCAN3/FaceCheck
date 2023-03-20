@@ -102,6 +102,8 @@ celerybeat.pid
 *.sage.py
 
 # Environments
+venv\Lib\site-packages\_dlib_pybind11.cp310-win_amd64.pyd
+venv\Lib\site-packages\PyWin32.chm
 .env
 .venv
 env/

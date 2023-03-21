@@ -56,7 +56,7 @@ It is not yet close to perfection. There are yet things that can be improved and
 ## References
   - [Face recognition model](https://github.com/ageitgey/face_recognition)
   - [Dlib](https://pyimagesearch.com/2021/04/19/face-detection-with-dlib-hog-and-cnn/)
-  - Bot name inspired by: [FaceCheck (PS: Not particularly useful information)](https://support.overwolf.com/en/support/solutions/articles/9000179585-what-is-facecheck-)
+  - Project name inspired by: [FaceCheck (PS: Not particularly useful information)](https://support.overwolf.com/en/support/solutions/articles/9000179585-what-is-facecheck-)
 
 ## Team members
 - **Aaryan Tyagi**
